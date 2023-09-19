@@ -1,59 +1,39 @@
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class AvestruzDB {
 
-    private HashMap<Integer, String> TabelaChaveValor;
-
-    public AvestruzDB() {
-        TabelaChaveValor = new HashMap<>();
-    }
-    // Comando de insert
-    public void insert(int key, String value) {
-        TabelaChaveValor.put(key, value);
-    }
-    // Comando de remove
-    public void remove(int key) {
-        TabelaChaveValor.remove(key);
-    }
-    // Comando de busca
-    public String search(int key) {
-        return TabelaChaveValor.get(key);
-    }
-    // Comando de busca
-    public void update(int key, String newValue) {
-        TabelaChaveValor.put(key, newValue);
-    }
-
     public static void main(String[] args) {
-        AvestruzDB avestruzDB = new AvestruzDB();
+        HashMap<Integer, String> avestruzDB = new HashMap<>();
 
-        // Ler os commando na CLI 
-        // Algo ta dando errado
-        String command = args[0];
-        int key = Integer.parseInt(args[1]);
-        String value = null;
-        if (command.equals("--insert")) {
-            value = args[2];
-        }
+        Scanner scanner = new Scanner(System.in);
 
-        // Switch pra verificar cada comando
-        switch (command) {
-            case "--insert":
-                avestruzDB.insert(key, value);
+        while (true) {
+            System.out.println("Digite um comando:");
+            String command = scanner.nextLine();
+
+            if (command.equals("sair")) {
                 break;
-            case "--remove":
-                avestruzDB.remove(key);
-                break;
-            case "--search":
-                value = avestruzDB.search(key);
-                System.out.println(value);
-                break;
-            case "--update":
-                value = args[2];
-                avestruzDB.update(key, value);
-                break;
-            default:
-                System.out.println("Unknown command: " + command);
+            }
+            switch (command) {
+                case "inserir":
+                    int key = Integer.parseInt(scanner.nextLine());
+                    String value = scanner.nextLine();
+                    avestruzDB.put(key, value);
+                    break;
+                case "remover":
+                    key = Integer.parseInt(scanner.nextLine());
+                    avestruzDB.remove(key);
+                    break;
+                case "buscar":
+                    key = Integer.parseInt(scanner.nextLine());
+                    value = avestruzDB.get(key);
+                    System.out.println(value);
+                    break;
+                default:
+                    System.out.println("Comando desconhecido: " + command);
+            }
         }
+        scanner.close();
     }
 }
