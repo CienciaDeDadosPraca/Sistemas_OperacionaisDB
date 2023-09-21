@@ -11,22 +11,27 @@ public class AvestruzDB {
         while (true) {
             System.out.println("Digite um comando:");
             String command = scanner.nextLine();
+            String[] comando = command.split(" ");
+            String comand = comando[0];
 
-            if (command.equals("sair")) {
+            String[] ChaveValor = comando[1].split(",");
+            Integer key = Integer.valueOf(ChaveValor[0]);
+            
+
+
+            if (comando[0].equals("sair")) {
                 break;
             }
-            switch (command) {
+            switch (comand) {
                 case "inserir":
-                    int key = Integer.parseInt(scanner.nextLine());
-                    String value = scanner.nextLine();
+                    String value = ChaveValor[1];
                     avestruzDB.put(key, value);
+                    System.out.println("Inserido");
                     break;
                 case "remover":
-                    key = Integer.parseInt(scanner.nextLine());
                     avestruzDB.remove(key);
                     break;
                 case "buscar":
-                    key = Integer.parseInt(scanner.nextLine());
                     value = avestruzDB.get(key);
                     System.out.println(value);
                     break;
