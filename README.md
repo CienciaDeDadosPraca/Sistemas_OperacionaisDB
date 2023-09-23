@@ -1,6 +1,6 @@
 # AvestruzDB
 
-Parte A (30% dos pontos): RF-1, RF-2, RF-3, RF-4, RF-5, RFN-1 - Entrega 23/09/2023
+Parte A (30% dos pontos): RF-1, RF-2, RF-3, RF-4, RF-5, RFN-1 - Entrega 24/09/2023
 
 • RF-1: Suportar a inserção de objetos no banco de dados. 
 
