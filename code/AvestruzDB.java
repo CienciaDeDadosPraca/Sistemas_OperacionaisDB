@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class AvestruzDB {
-
+    private static final String FILE_NAME = "avestruz_db.txt";
+    
     public static void main(String[] args) {
         HashMap<Integer, String> avestruzDB = new HashMap<>();
 
