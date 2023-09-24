@@ -28,11 +28,10 @@ public class KeyValueDB {
                     System.out.println("Formato inválido. Use o formato 'chave,valor'.");
                     continue;
                 }
-                
-                int key = Integer.parseInt(keyValue[0]);
-                String value = keyValue[1];
-                
+    
                 try {
+                    int key = Integer.parseInt(keyValue[0]);
+                    String value = keyValue[1];
                     if (command.equals("inserir")) {
                         keyValueDB.insert(key, value);
                     } else if (command.equals("remover")) {
@@ -41,8 +40,11 @@ public class KeyValueDB {
                         String result = keyValueDB.search(key);
                         System.out.println("Valor encontrado: " + result);
                     }
-                } catch (IOException e) {
+                }   catch (IOException e) {
                     System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
+                }
+                    catch (NumberFormatException e){
+                    System.out.println("O valor de entrada para a chave deve ser um número inteiro");
                 }
             } else {
                 System.out.println("Comando desconhecido: " + command);
