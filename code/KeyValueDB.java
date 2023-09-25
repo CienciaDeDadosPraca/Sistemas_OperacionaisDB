@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
-    
+
 public class KeyValueDB {
     private static final String FILE_NAME = "Database.txt";
 
@@ -14,12 +14,12 @@ public class KeyValueDB {
         KeyValueDatabase keyValueDB = new KeyValueDatabase(FILE_NAME);
 
         while (true) {
-            System.out.println("Digite um comando (inserir, remover, buscar, sair):");
+            System.out.println("Digite um comando (inserir, remover, buscar, atualizar, sair):");
             String command = scanner.nextLine().trim().toLowerCase();
 
             if (command.equals("sair")) {
                 break;
-            } else if (command.equals("inserir") || command.equals("remover") || command.equals("buscar")) {
+            } else if (command.equals("inserir") || command.equals("remover") || command.equals("buscar") || command.equals("atualizar")) {
                 System.out.println("Digite a chave e o valor (ex: chave,valor):");
                 String input = scanner.nextLine().trim();
                 String[] keyValue = input.split(",");
@@ -28,10 +28,11 @@ public class KeyValueDB {
                     System.out.println("Formato inválido. Use o formato 'chave,valor'.");
                     continue;
                 }
-    
+
+                int key = Integer.parseInt(keyValue[0]);
+                String value = keyValue[1];
+                
                 try {
-                    int key = Integer.parseInt(keyValue[0]);
-                    String value = keyValue[1];
                     if (command.equals("inserir")) {
                         keyValueDB.insert(key, value);
                     } else if (command.equals("remover")) {
@@ -39,12 +40,15 @@ public class KeyValueDB {
                     } else if (command.equals("buscar")) {
                         String result = keyValueDB.search(key);
                         System.out.println("Valor encontrado: " + result);
+                    } else if (command.equals("atualizar")) {
+                        System.out.println("Digite o novo valor:");
+                        String novoValor = scanner.nextLine().trim();
+                        keyValueDB.update(key, novoValor);
                     }
-                }   catch (IOException e) {
+                } catch (IOException e) {
                     System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
-                }
-                    catch (NumberFormatException e){
-                    System.out.println("O valor de entrada para a chave deve ser um número inteiro");
+                } catch (NumberFormatException e) {
+                    System.out.println("O valor de entrada para a chave deve ser um número inteiro.");
                 }
             } else {
                 System.out.println("Comando desconhecido: " + command);
@@ -79,6 +83,16 @@ class KeyValueDatabase {
 
     public String search(int key) {
         return data.get(key);
+    }
+
+    public void update(int key, String newValue) throws IOException {
+        if (data.containsKey(key)) {
+            data.put(key, newValue);
+            saveToFile();
+            System.out.println("Atualizado.");
+        } else {
+            System.out.println("Chave não encontrada.");
+        }
     }
 
     private void loadFromFile() {
