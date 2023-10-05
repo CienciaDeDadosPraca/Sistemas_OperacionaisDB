@@ -5,11 +5,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.net.Socket;
+import java.io.IOException;
 
 public class KeyValueDB {
     private static final String FILE_NAME = "Database.txt";
 
     public static void main(String[] args) {
+        try{
+        clientChat cliente = new clientChat();
+        cliente.start();
+        }
+        catch (IOException ex){
+            System.out.println("Erro ao iniciar cliente: ", ex.getMessage());
+        }
         Scanner scanner = new Scanner(System.in);
         KeyValueDatabase keyValueDB = new KeyValueDatabase(FILE_NAME);
 
@@ -120,4 +129,22 @@ class KeyValueDatabase {
             }
         }
     }
+}
+
+class clientChat{
+    // na aplicação do cliente devemos passar o endereço onde o servidor está localizado
+    // o endereço "127.0.0.1" é o endereço local
+    private static final String serverAdress ="127.0.0.1"
+    private Socket clientSocket;
+
+    public void start() throws IOException{
+        // o construtor do start informa o endereço IP e o numero da porta 
+        // o número da porta é o 4000
+        // caso altere na aplicação do servidor deve alterar na aplicação cliente também
+        // por isso devemos alterar a constante PORTA na aplicação servidor para PUBLIC STATIC
+        // para que todas as aplicações na pasta do projeto saibam desse endereço 
+        serverAdress = new Socket(serverAdress,chatServer.PORTA)
+    }
+
+
 }
