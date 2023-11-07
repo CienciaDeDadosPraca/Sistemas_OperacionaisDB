@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /*O CONTEUDO DE SOCKET ESTÁ HOSPEDADO NO link
@@ -26,6 +28,7 @@ class ChatServer{
     public static final int PORT = 4000;
 
     private ServerSocket serverSocket;
+    private final List<clientSocket> clients = new LinkedList<>();
 
     public void start() throws IOException{
         
@@ -44,31 +47,51 @@ class ChatServer{
     private void clientConnectionLoop() throws IOException{
         while(true){
             /*O metodo accept retorna um socket do cliente  */
-            Socket clientSocket = serverSocket.accept();
+            /*O método accept é uma operação bloqueante. O servidor fica parado
+             * Ao terminar o loop o método fica esperando uma outra conexão
+             */
+            clientSocket clientSocket = new clientSocket(serverSocket.accept());
+
+            /*apos criar o socket iremos armazenalo em uma lista */
+            clients.add(clientSocket);
+
+
             /*Aqui estamos obtendo o endereço remoto do cliente conectado
              * A mensagem irá aparecer a porta que o cliente está utilizando para receber o retorno do server
              * O cliente conecta na porta 4000 
              * O servidor irá  utiizar a porta passada pelo getRemoteSocketAdress, essa porta é definida pelo Sistema Operacional
              */
 
+            // o método na função lambda () nao precisa de definição de acesso e nem mesmo o tipo de retorno.
+            // o Java possui inferencia de tipo ele identifica por conta propria o retorno
+            // a -> é uma arrow function. O método na função lambda não pode receber funções que retorno Throws Exception
+            new Thread(() -> clientMessageLoop(clientSocket)).start(); 
 
-            /* Na classe servidor, devemos ter um objeto "in" para receber a mensagem transmitida pelo cliene através do "out" 
-              * Aqui possuimos o mesmo problema dos bytes
-              * Temos que utilizar a mesma lógica que adotamos na classe cliente
-              * Criaremos um bufferedRead e atribuiremos um novo atributo na classe Server  
-              * Copiamos o código do cliente e onde temos Output substituimos por Input
-              * onde está writer trocamos por reader
-             */
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            /*Lê até encontrar um \n */
-            String msg = in.readLine();
-            System.out.println("Mensagem recebida do cliente "+clientSocket.getRemoteSocketAddress()+ ": " +msg);
-
-            clientSocket.getInputStream();
-
-
-            System.out.println("Cliente: "+clientSocket.getRemoteSocketAddress());
         }
+    }
+
+    public void clientMessageLoop(clientSocket socket){
+        String msg;
+        try{
+            while((msg = socket.getMessage())!=null){
+                if("sair".equalsIgnoreCase(msg))
+                    return;
+
+                System.out.printf("Msg recebida do cliente %s: %s\n", socket.getRemoteSocketAddress(),msg);
+
+                sendMessageToAll(socket, msg);
+        }} finally{
+            socket.close();
+        }
+    }
+
+    private void sendMessageToAll(clientSocket sender,String msg){
+        for(clientSocket clientSocket:clients){
+            if(!sender.equals(clientSocket))
+                clientSocket.sendMessage(msg);
+        }
+
+
     }
 
     public static void main(String[] args){
