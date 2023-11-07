@@ -4,36 +4,27 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class KeyValueDB {
     private static final String FILE_NAME = "Database.txt";
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         KeyValueDatabase keyValueDB = new KeyValueDatabase(FILE_NAME);
+        String command = args[0];
+        String[] keyValue = args[1].split(",");
+        
 
-        while (true) {
-            System.out.println("Digite um comando (inserir, remover, buscar, atualizar, sair):");
-            String command = scanner.nextLine().trim().toLowerCase();
 
-            if (command.equals("sair")) {
-                break;
-            } else if (command.equals("inserir") || command.equals("remover") || command.equals("buscar") || command.equals("atualizar")) {
-                System.out.println("Digite a chave e o valor (ex: chave,valor):");
-                String input = scanner.nextLine().trim();
-                String[] keyValue = input.split(",");
-                
+            if (command.equals("inserir") || command.equals("remover") || command.equals("buscar") || command.equals("atualizar")) {
                 if (keyValue.length != 2) {
                     System.out.println("Formato inválido. Use o formato 'chave,valor'.");
-                    continue;
                 }
-
+            
                 int key = Integer.parseInt(keyValue[0]);
-                String value = keyValue[1];
                 
                 try {
                     if (command.equals("inserir")) {
+                        String value = keyValue[1];
                         keyValueDB.insert(key, value);
                     } else if (command.equals("remover")) {
                         keyValueDB.remove(key);
@@ -41,9 +32,8 @@ public class KeyValueDB {
                         String result = keyValueDB.search(key);
                         System.out.println("Valor encontrado: " + result);
                     } else if (command.equals("atualizar")) {
-                        System.out.println("Digite o novo valor:");
-                        String novoValor = scanner.nextLine().trim();
-                        keyValueDB.update(key, novoValor);
+                        String value = keyValue[1];
+                        keyValueDB.update(key, value);
                     }
                 } catch (IOException e) {
                     System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
@@ -53,9 +43,6 @@ public class KeyValueDB {
             } else {
                 System.out.println("Comando desconhecido: " + command);
             }
-        }
-
-        scanner.close();
     }
 }
 
