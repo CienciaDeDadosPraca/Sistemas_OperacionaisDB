@@ -1,6 +1,7 @@
 Detalhamento do código:
 
-Classe KeyValueDB:
+- Classe KeyValueDB:
+
 Esta classe representa o banco de dados de valores-chave. Possui os seguintes métodos:
 
 KeyValueDB(String fileName)
@@ -24,10 +25,9 @@ loadFromFile()
 saveToFile()
 > Salva os dados do banco de dados no arquivo especificado.
 
-Função principal:
-A função main() é o ponto de entrada do programa. Ele analisa os argumentos da linha de comando e executa a operação apropriada do banco de dados.
+- Função principal:
 
-Resumo dos comandos:
+A função main() é o ponto de entrada do programa. Ela analisa os argumentos da linha de comando e executa a operação apropriada do banco de dados. Resumo dos comandos:
 
 inserir
 > Insere um novo par chave-valor.
