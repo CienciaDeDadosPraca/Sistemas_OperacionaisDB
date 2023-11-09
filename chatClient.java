@@ -1,10 +1,9 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 
-public class chatClient {
+public class chatClient implements Runnable {
     /*No caso do cliente, declaramos o socket */
     private clientSocket clientSocket;
 
@@ -26,7 +25,7 @@ public class chatClient {
     }
 
     public void start() throws  IOException{
-
+        try{
         System.out.println("Cliente conectado ao servidor em: " + SERVER_ADRESS + ":" + ChatServer.PORT);
         /*No caso do cliente Socket pode ser que ocorra uma exceção ao tentar abrir a porta e ao tentar conectar ao endereço IP passado */
         clientSocket = new clientSocket(new Socket(SERVER_ADRESS, 4000));
@@ -40,9 +39,21 @@ public class chatClient {
          * Podemos utilizar apenas o PrintWriter que ele encapsulas as funções dos outros 2 objetos OutPutStreamWrites(caracteres) e BufferedWriter(linhas)
          */
 
+        new Thread(this).start();
 
         messageLoop();
+        }finally{
+            clientSocket.close();
+        }
     }
+
+    @Override
+    public void run(){
+        String msg;
+        while((msg = clientSocket.getMessage())!=null){
+        System.out.printf("Msg recebida do servidor: %s\n",msg);
+    }
+}
 
     /*No caso do cliente, também devemos possuir um loop infinito para que a mensagem será trocada 
      * O loop do cliente é um loop de espera de conexões

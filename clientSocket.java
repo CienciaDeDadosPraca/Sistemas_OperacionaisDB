@@ -73,7 +73,6 @@ public class clientSocket{
     }
 
     public void close(){
-       
         try {
             in.close();
             out.close();
@@ -83,5 +82,4 @@ public class clientSocket{
             System.out.println("Erro ao fechar socket: " + e.getMessage());
         }
     }
-
 }

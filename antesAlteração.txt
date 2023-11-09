@@ -12,6 +12,7 @@ class ChatServer{
     public static final int PORT = 4000;
     private ServerSocket serverSocket;
     private final List<clientSocket> clients = new LinkedList<>();
+    private KeyValueDatabase bancoDados;
 
 
     public void start() throws IOException{
@@ -62,6 +63,8 @@ class ChatServer{
                 if("sair".equalsIgnoreCase(msg))
                     return;
                 System.out.printf("Msg recebida do cliente %s: %s\n", clientesocket.getRemoteSocketAddress(),msg);
+                String ip = clientesocket.getRemoteSocketAddress();
+                this.bancoDados = new KeyValueDatabase(ip);
                 sendMessageToAll(clientesocket, msg);
         }} finally{
             clientesocket.close();

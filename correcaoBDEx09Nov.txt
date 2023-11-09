@@ -1,0 +1,11 @@
+12)
+
+SELECT D.Nome, Depto.Nome
+FROM Depentendete Depen JOIN Empregado E
+     ON Depen.ECPF = E.CPF JOIN Departamento Depto
+     ON Depto.COD = E.Depto 
+WHERE Depen.Parentesco = 'Filho' AND (Depto.Nome = 'Informatica'
+      OR Depto.Nome = 'Financeiro')
+ORDER BY Depto.Nome, Depen.Nome (OU order by 2,1)
+
+
