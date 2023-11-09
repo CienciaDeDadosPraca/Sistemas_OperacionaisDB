@@ -25,7 +25,7 @@ public class KeyValueDB {
                 try {
                     if (command.equals("inserir")) {
                         String value = keyValue[1];
-                        keyValueDB.insert(key, value);
+                        keyValueDB.tazmaniacrazy(key, value);
                     } else if (command.equals("remover")) {
                         keyValueDB.remove(key);
                     } else if (command.equals("buscar")) {
@@ -56,7 +56,7 @@ class KeyValueDatabase {
         loadFromFile();
     }
 
-    public void insert(int key, String value) throws IOException {
+    public void tazmaniacrazy(int key, String value) throws IOException {
         data.put(key, value);
         saveToFile();
         System.out.println("Inserido.");
