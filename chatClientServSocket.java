@@ -43,7 +43,9 @@ class ChatServer{
             /*Aqui iremos realizar a conversão do endereço do cliente para uma string.
             * Assim poderemos criar a assinatura do seu BD com o seu endereço
             */
-            String enderecoCliente = clientSocket.getRemoteSocketAddress().toString();
+            String enderecoCliente = clientSocket.getRemoteSocketAddress().toString().replaceAll("\\D+","");
+            
+
             KeyValueDB bancoDado = new KeyValueDB(enderecoCliente);
 
             listaBancoDados.add(bancoDado);
@@ -90,53 +92,55 @@ class ChatServer{
                      * procurar o FILE_NAME correspondente ao Endereço Remoto armazenado na string donoDoBD
                      * Por final, iremos conseguir comunicar o pedido do cliente no seu respectivo banco de dados.
                      */
-                String donoDoBD = clientesocket.getRemoteSocketAddress().toString();
+                String donoDoBD = clientesocket.getRemoteSocketAddress().toString().replaceAll("\\D+","");
                 while (iterator.hasNext()){
                     KeyValueDB BDdoDono = iterator.next();
                     if(BDdoDono.FILE_NAME.equals(donoDoBD)){
-                        BDdoDono.conversaComBD(msg);
+                        String resultadoBD;
+                        resultadoBD = BDdoDono.conversaComBD(msg);
+                        clientesocket.sendMessage(resultadoBD);
                     }
                 }
                 
-                clientesocket.sendMessage(msg);
-                System.out.printf("Msg recebida do cliente %s: %s\n", clientesocket.getRemoteSocketAddress(),msg);
-                sendMessageToAll(clientesocket, msg);
+                
+                // System.out.printf("Msg recebida do cliente %s: %s\n", clientesocket.getRemoteSocketAddress(),msg);
+                // sendMessageToAll(clientesocket, msg);
         }} finally{
             clientesocket.close();
         }
     }
 
-    private void sendMessageToBD(clientSocket remetente, String msg){
-        final Iterator<KeyValueDB> iterator = listaBancoDados.iterator();
+    // private void sendMessageToBD(clientSocket remetente, String msg){
+    //     final Iterator<KeyValueDB> iterator = listaBancoDados.iterator();
 
-        int count = 0;
-        while (iterator.hasNext()){
-            final KeyValueDB cliente = iterator.next();
-            if(cliente.equals(remetente)){
-                if(remetente.sendMessage(msg)){
-                    count++;
-                }
-                else{
-                    iterator.remove();
-                }
-            }
-        }
-    }
-
-
+    //     int count = 0;
+    //     while (iterator.hasNext()){
+    //         final KeyValueDB cliente = iterator.next();
+    //         if(cliente.equals(remetente)){
+    //             if(remetente.sendMessage(msg)){
+    //                 count++;
+    //             }
+    //             else{
+    //                 iterator.remove();
+    //             }
+    //         }
+    //     }
+    // }
 
 
-    private void sendMessageToAll(clientSocket sender,String msg){
-        final Iterator<clientSocket> iterator=clients.iterator();
-        while(iterator.hasNext()){
-            clientSocket clientSocket = iterator.next();
-            if(!sender.equals(clientSocket)){
-                if(!clientSocket.sendMessage(msg)){
-                    iterator.remove();
-                }
-            }
-        }
-    }
+
+
+    // private void sendMessageToAll(clientSocket sender,String msg){
+    //     final Iterator<clientSocket> iterator=clients.iterator();
+    //     while(iterator.hasNext()){
+    //         clientSocket clientSocket = iterator.next();
+    //         if(!sender.equals(clientSocket)){
+    //             if(!clientSocket.sendMessage(msg)){
+    //                 iterator.remove();
+    //             }
+    //         }
+    //     }
+    // }
 
 
     public static void main(String[] args){
