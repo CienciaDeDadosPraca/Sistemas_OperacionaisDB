@@ -1,3 +1,16 @@
+
+# COMANDO UTEIS GIT
+
+### COMANDO UTEIS GIT
+
+    1. CRIAÇÃO DE TAG COM MARCAÇÃO DE VERSÃO :
+        git tag -a "versao(pexemplo v1.0) -m "mensagem na criação da tag"
+
+    2. SE DESEJAR SABER QUAL URL DO REPOSITORIO REMOTO ESTÁ ASSOCIADO AO REPOSITORIO LOCAL:
+        git remote -v
+    3. CRIAÇÃO DE BRANCH E ASSOCIALA À UMA BRANCH NO REPOSITORIO REMOTO
+        git checkout "nome da branch"
+
 /*O CONTEUDO DE SOCKET ESTÁ HOSPEDADO NO link
  * https://www.youtube.com/watch?v=MtAfYUW7fJ4&t=983s
  * MANOEL CAMPOS DEV 1 Criando aplicação CLIENTE/SERVIDOR de CHAT em JAVA usando SOCKETS e THREADS
