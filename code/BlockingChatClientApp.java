@@ -4,17 +4,17 @@ import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * Aplicação cliente de chat utilizando a classe {@link Socket} que permite apenas requisições bloqueantes (blocking).
+ * Aplicação cliente de chat utilizando a classe Socket que permite apenas requisições bloqueantes (blocking).
  * 
- * <p>Observe que a classe implementa a interface {@link Runnable}.
- * Com isto, o método {@link #run()} foi incluído (pressionando-se ALT-ENTER após incluir o "implements Runnable")
- * para que ele seja executado por uma nova thread que criamos dentro do {@link #messageLoop()}.
- * O método {@link #run()} fica em loop aguardando mensagens do servidor.</p>
+ * A classe implementa a interface Runnable.
+ * Com isto, o método run() foi incluído
+ * para que ele seja executado por uma nova thread que criamos dentro do messageLoop().
+ * O método run() fica em loop aguardando mensagens do servidor.
  */
 public class BlockingChatClientApp implements Runnable {
     /**
      * Endereço IP ou nome DNS para conectar no servidor. IP padrão.
-     * O número da porta é obtido diretamente da constante {@link BlockingChatServerApp#PORT} na classe do servidor.
+     * O número da porta é obtido diretamente da constante BlockingChatServerApp#PORT na classe do servidor.
      */
     public static final String SERVER_ADDRESS = "127.0.0.1";
 
@@ -25,7 +25,7 @@ public class BlockingChatClientApp implements Runnable {
     
     /**
      * Objeto que armazena alguns dados do cliente (como o login)
-     * e o {@link Socket} que representa a conexão do cliente com o servidor.
+     * e o Socket que representa a conexão do cliente com o servidor.
      */
     private ClientSocket clientSocket;
     
@@ -34,7 +34,7 @@ public class BlockingChatClientApp implements Runnable {
      * Pode-se executar quantas instâncias desta classe desejar.
      * Isto permite ter vários clientes conectados e interagindo por meio do servidor.
      * 
-     * @param args parâmetros de linha de comando (não usados para esta aplicação)
+     * param args parâmetros de linha de comando (não usados para esta aplicação)
      */
 
      public static void main(String[] args) {
@@ -56,10 +56,10 @@ public class BlockingChatClientApp implements Runnable {
     /**
      * Inicia o cliente, conectando ao servidor e
      * entrando no loop de envio e recebimento de mensagens.
-     * @throws IOException quando um erro de I/O (Input/Output, ou seja,
-     *                     Entrada/Saída) ocorrer, como quando o cliente tentar
-     *                     conectar no servidor, mas o servidor não está aberto
-     *                     ou o cliente não tem acesso à rede.
+     * throws IOException quando um erro de I/O (Input/Output, ou seja,
+     * Entrada/Saída) ocorrer, como quando o cliente tentar
+     * conectar no servidor, mas o servidor não está aberto
+     * ou o cliente não tem acesso à rede.
      */
     private void start() throws IOException {
         final Socket socket = new Socket(SERVER_ADDRESS, BlockingChatServerApp.PORT);
@@ -104,10 +104,10 @@ public class BlockingChatClientApp implements Runnable {
      * e o cliente não receber uma mensagem null.
      * Se uma mensagem null for recebida, é porque ocorreu erro na conexão com o servidor.
      * Neste caso, podemos encerrar a espera por novas mensagens.
-     * O método tem esse nome pois estamos implementando a interface {@link Runnable}
+     * O método tem esse nome pois estamos implementando a interface Runnable
      * na declaração da classe, o que nos obriga a incluir um método com tal nome
      * na nossa classe. Com isto, permitimos que tal método possa ser executado
-     * por uma nova thread que criamos no método {@link #messageLoop()}, o que facilita a criação da thread.
+     * por uma nova thread que criamos no método messageLoop(), o que facilita a criação da thread.
      * 
      */
     @Override
