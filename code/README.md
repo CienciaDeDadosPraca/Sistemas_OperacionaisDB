@@ -1,6 +1,6 @@
 Estrutura de banco de dados Cliente Servidor baseado na class Socket do Java.
 
-- Blocking Chat Client:
+- BlockingChatClientApp:
 > Aplicação cliente de chat utilizando a classe {@link Socket} que permite apenas requisições bloqueantes (blocking).
 
 Detalhamento do código KeyValueDB:
