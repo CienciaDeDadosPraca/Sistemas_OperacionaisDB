@@ -1,4 +1,4 @@
-Detalhamento do código:
+Detalhamento do código KeyValueDB:
 
 - Classe KeyValueDB:
 
