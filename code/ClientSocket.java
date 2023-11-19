@@ -37,11 +37,7 @@ public class ClientSocket implements Closeable {
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    /*
-     Envia uma mensagem e <b>não</b> espera por uma resposta.
-     @param msg mensagem a ser enviada
-     @return true se o socket ainda estava aberto e a mensagem foi enviada, false caso contrário
-    */
+    // Envia uma mensagem e <b>não</b> espera por uma resposta.
     public boolean sendMsg(String msg) {
         out.println(msg);
         
@@ -49,10 +45,7 @@ public class ClientSocket implements Closeable {
         return !out.checkError();
     }
 
-    /*
-     Obtém uma mensagem de resposta.
-     @return a mensagem obtida ou null se ocorreu erro ao obter a resposta (como falha de conexão)
-    */
+    // Obtém uma mensagem de resposta.
     public String getMessage() {
         try {
             return in.readLine();
