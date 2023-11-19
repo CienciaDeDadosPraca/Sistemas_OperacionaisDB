@@ -140,6 +140,37 @@ public class BlockingChatServerApp {
                 }
                 else {
                     // Implementar leitura dos comandos inserirdos pelo usuário da DB
+                    System.out.println("Mensagem recebida de "+ clientSocket.getLogin() +": " + msg);
+                    String[] ComandoKeyValue = msg.split(" ");
+                    String command = ComandoKeyValue[0];
+                    String[] keyValue = ComandoKeyValue[1].split(",");
+                    int key = Integer.parseInt(keyValue[0]);
+                    
+                    try {
+                        if (command.equals("inserir")) {
+                            String value = keyValue[1];
+                            keyValueDB.insert(key,value);
+                            
+                        } else if (command.equals("remover")) {
+                            keyValueDB.remove(key);
+                        } 
+                        else if (command.equals("loop")) {
+                              do {
+                            System.out.println("a");
+                           } while (true);
+                        }
+                        else if (command.equals("buscar")) {
+                            String result = keyValueDB.search(key);
+                            System.out.println("Valor encontrado: " + result);
+                        } else if (command.equals("atualizar")) {
+                            String value = keyValue[1];
+                            keyValueDB.update(key, value);
+                        }
+                    } catch (IOException e) {
+                        System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
+                    } catch (NumberFormatException e) {
+                        System.out.println("O valor de entrada para a chave deve ser um número inteiro.");
+                    }
                     msg = clientSocket.getLogin() + " diz: " + msg;
                 };
 
