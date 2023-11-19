@@ -1,43 +1,27 @@
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
-/**
- * Aplicação cliente de chat utilizando a classe Socket que permite apenas requisições bloqueantes (blocking).
- * 
- * A classe implementa a interface Runnable.
- * Com isto, o método run() foi incluído
- * para que ele seja executado por uma nova thread que criamos dentro do messageLoop().
- * O método run() fica em loop aguardando mensagens do servidor.
- */
+/*
+ Cliente de chat usando a classe Socket com requisições bloqueantes (blocking).
+ Implementa a interface Runnable para ser executado em uma nova thread.
+*/
 public class BlockingChatClientApp implements Runnable {
-    /**
-     * Endereço IP ou nome DNS para conectar no servidor. IP padrão.
-     * O número da porta é obtido diretamente da constante BlockingChatServerApp#PORT na classe do servidor.
-     */
+    
+    // Endereço IP ou nome DNS do servidor. IP padrão.
     public static final String SERVER_ADDRESS = "127.0.0.1";
-
-    /**
-     * Objeto para capturar dados do teclado e assim permitir que o usuário digite mensagens a enviar.
-     */
+    
+    // Objeto para capturar dados do teclado e permitir que o usuário digite mensagens.
     private final Scanner scanner;
     
-    /**
-     * Objeto que armazena alguns dados do cliente (como o login)
-     * e o Socket que representa a conexão do cliente com o servidor.
-     */
+    // Armazena dados do cliente (como login) e o Socket para conexão com o servidor.
     private ClientSocket clientSocket;
     
-    /**
-     * Executa a aplicação cliente.
-     * Pode-se executar quantas instâncias desta classe desejar.
-     * Isto permite ter vários clientes conectados e interagindo por meio do servidor.
-     * 
-     * param args parâmetros de linha de comando (não usados para esta aplicação)
-     */
-
-     public static void main(String[] args) {
+    /*
+     Método principal da aplicação cliente.
+     Pode-se executar várias instâncias desta classe para ter vários clientes conectados ao servidor.
+    */
+    public static void main(String[] args) {
         try {
             BlockingChatClientApp client = new BlockingChatClientApp();
             client.start();
@@ -46,21 +30,15 @@ public class BlockingChatClientApp implements Runnable {
         }
     }
     
-    /**
-     * Instancia um cliente, realizando o mínimo de operações necessárias.
-     */
+    // Instancia um cliente, realizando operações mínimas necessárias.
     public BlockingChatClientApp(){
         scanner = new Scanner(System.in);
     }
 
-    /**
-     * Inicia o cliente, conectando ao servidor e
-     * entrando no loop de envio e recebimento de mensagens.
-     * throws IOException quando um erro de I/O (Input/Output, ou seja,
-     * Entrada/Saída) ocorrer, como quando o cliente tentar
-     * conectar no servidor, mas o servidor não está aberto
-     * ou o cliente não tem acesso à rede.
-     */
+    /*
+     Inicia o cliente, conectando ao servidor e entrando no loop de envio e recebimento de mensagens.
+     Lança IOException quando ocorre um erro de I/O, como falha ao conectar ao servidor.
+    */
     private void start() throws IOException {
         final Socket socket = new Socket(SERVER_ADDRESS, BlockingChatServerApp.PORT);
         clientSocket = new ClientSocket(socket);
@@ -70,14 +48,14 @@ public class BlockingChatClientApp implements Runnable {
 
         login();
 
-        new Thread(this).start();
+        new Thread(this).start(); // Inicia nova thread para recebimento de mensagens
         messageLoop();
     }
 
-    /**
-     * Executa o login no sistema, enviando o login digitado para o servidor.
-     * A primeira mensagem que o servidor receber após um cliente conectar é então o login daquele cliente.
-     */
+    /*
+     Realiza o login no sistema, enviando o login para o servidor.
+     O servidor recebe o login do cliente assim que ele se conecta.
+    */
     private void login() {
         System.out.print("Digite seu login: ");
         final String login = scanner.nextLine();
@@ -85,35 +63,29 @@ public class BlockingChatClientApp implements Runnable {
         clientSocket.sendMsg(login);
     }
 
-    /**
-     * Inicia o loop de envio e recebimento de mensagens.
-     * O loop é interrompido quando o usuário digitar "sair".
-     */
+    /*
+     Inicia o loop de envio e recebimento de mensagens.
+     O loop é interrompido quando o usuário digita "sair".
+    */
     private void messageLoop() {
         String msg;
         do {
-            System.out.print("Digite uma msg (ou 'sair' para encerrar): ");
+            System.out.print("Digite uma mensagem (ou 'sair' para encerrar): ");
             msg = scanner.nextLine();
             clientSocket.sendMsg(msg);
         } while(!"sair".equalsIgnoreCase(msg));
         clientSocket.close();
     }
 
-    /**
-     * Aguarda mensagens do servidor enquanto o socket não for fechado
-     * e o cliente não receber uma mensagem null.
-     * Se uma mensagem null for recebida, é porque ocorreu erro na conexão com o servidor.
-     * Neste caso, podemos encerrar a espera por novas mensagens.
-     * O método tem esse nome pois estamos implementando a interface Runnable
-     * na declaração da classe, o que nos obriga a incluir um método com tal nome
-     * na nossa classe. Com isto, permitimos que tal método possa ser executado
-     * por uma nova thread que criamos no método messageLoop(), o que facilita a criação da thread.
-     * 
-     */
+    /*
+     Aguarda mensagens do servidor enquanto o socket não é fechado e o cliente não recebe uma mensagem nula.
+     Se uma mensagem nula é recebida, indica erro na conexão com o servidor.
+     Este método implementa a interface Runnable para ser executado em uma nova thread.
+    */
     @Override
     public void run() {
         String msg;
-        while((msg = clientSocket.getMessage())!=null) {
+        while((msg = clientSocket.getMessage()) != null) {
             System.out.println(msg);
         }
     }
