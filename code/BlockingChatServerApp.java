@@ -27,10 +27,7 @@ public class BlockingChatServerApp {
         clientSocketList = new LinkedList<>();
     }
 
-    /*
-     Executa a aplicação servidora que fica em loop infinito aguardando conexões dos clientes.
-     @param args parâmetros de linha de comando (não usados para esta aplicação).
-    */
+    // Executa a aplicação servidora que fica em loop infinito aguardando conexões dos clientes.
     public static void main(String[] args) {
         final BlockingChatServerApp server = new BlockingChatServerApp();
         try {
@@ -41,8 +38,8 @@ public class BlockingChatServerApp {
     }
 
     /*
-     Inicia a aplicação, criando um socket para o servidor ficar escutando na porta {@link #PORT}.
-     @throws IOException quando um erro de I/O (Input/Output, ou seja, Entrada/Saída) ocorrer, como quando o servidor tentar iniciar mas a porta que ele deseja escutar já estiver em uso.
+     Inicia a aplicação, criando um socket para o servidor ficar esperando receber entrada na porta.
+     IOException quando um erro de I/O (Input/Output, ou seja, Entrada/Saída) ocorrer, como quando o servidor tentar iniciar mas a porta que ele deseja escutar já estiver em uso.
     */
     private void start() throws IOException {
         serverSocket = new ServerSocket(PORT);
@@ -54,7 +51,7 @@ public class BlockingChatServerApp {
 
     /*
      Inicia o loop infinito de espera por conexões dos clientes. Cada vez que um cliente conecta, uma Thread é criada para executar o método clientMessageLoop() que ficará esperando mensagens do cliente.
-     @throws IOException quando um erro de I/O (Input/Output, ou seja, Entrada/Saída) ocorrer, como quando o servidor tentar aceitar a conexão de um cliente, mas ele desconectar antes disso (porque a conexão dele ou do servidor cairam, por exemplo).
+     IOException quando um erro de I/O (Input/Output, ou seja, Entrada/Saída) ocorrer, como quando o servidor tentar aceitar a conexão de um cliente, mas ele desconectar antes disso (porque a conexão dele ou do servidor cairam, por exemplo).
     */
     private void clientConnectionLoop() throws IOException {
         try {
@@ -92,7 +89,6 @@ public class BlockingChatServerApp {
      Método executado sempre que um cliente conectar ao servidor.
      O método fica em loop aguardando mensagens do cliente, até que este desconecte.
      A primeira mensagem que o servidor receber após um cliente conectar é o login enviado pelo cliente.
-     @param clientSocket socket do cliente, por meio do qual o servidor pode se comunicar com ele.
     */
     private void clientMessageLoop(final ClientSocket clientSocket) {
         try {
@@ -153,10 +149,7 @@ public class BlockingChatServerApp {
     /*
      Encaminha uma mensagem recebida de um determinado cliente para todos os outros clientes conectados.
      Usa um iterator para permitir percorrer a lista de clientes conectados.
-     Neste caso não é usado um for pois, como estamos removendo um cliente da lista caso não consigamos enviar mensagem pra ele (pois ele já desconectou).
-     Se fizermos isso usando um foreach, ocorrerá erro em tempo de execução. Um foreach não permite percorrer e modificar uma lista ao mesmo tempo. Por isoo, a forma mais segura de fazer isso é com um iterator.
-     @param sender cliente que enviou a mensagem
-     @param msg mensagem recebida. Exemplo de mensagem: "Olá pessoal"
+     Neste caso não é usado um for pois, como estamos removendo um cliente da lista caso não consigamos enviar mensagem pra ele (pois ele já desconectou), se fizermos isso usando um foreach, ocorrerá erro em tempo de execução. Um foreach não permite percorrer e modificar uma lista ao mesmo tempo. Por isoo, a forma mais segura de fazer isso é com um iterator.
     */
     private void sendMsgToAll(final ClientSocket sender, final String msg) {
         final Iterator<ClientSocket> iterator = clientSocketList.iterator();
