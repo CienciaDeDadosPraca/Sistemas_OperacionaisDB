@@ -1,3 +1,6 @@
+import java.io.*;
+import java.net.Socket;
+import java.net.SocketAddress;
 /*
  Permite enviar e receber mensagens por meio de um socket cliente.
  Tal classe é utilizada tanto pela aplicação cliente {@link BlockingChatClientApp} quanto pelo servidor {@link BlockingChatServerApp}.
