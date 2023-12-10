@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.List;
 public class BlockingChatServerApp {
     // Instância da base de dados chave-valor
     KeyValueDatabase keyValueDB = new KeyValueDatabase("Database.txt");
+
+    // Instância uma lista que vai servir como tabela de páginas.
+    List<Integer> pageTable = new ArrayList<>();
 
     /**
      Porta na qual o servidor vai ficar escutando (aguardando conexões dos clientes).
@@ -72,6 +76,8 @@ public class BlockingChatServerApp {
                 try {
                     new Thread(() -> clientMessageLoop(clientSocket)).start();
                     clientSocketList.add(clientSocket);
+                    // Coloca a nova Thread na tabela de páginas
+                    pageTable.add(1);
                 } catch (OutOfMemoryError ex) {
                     System.err.println(
                             "Não foi possível criar thread para novo cliente. O servidor possivelmente está sobrecarregado. Conexão será fechada: ");
@@ -110,11 +116,21 @@ public class BlockingChatServerApp {
                     String command = comandoKeyValue[0];
                     String[] keyValue = comandoKeyValue[1].split(",");
                     int key = Integer.parseInt(keyValue[0]);
-                    
+                    int numObjetos = 0;
+                    int numObjetosMax = 5;
+                    int paginas[] = new int[10];
                     try {
                         if (command.equals("inserir")) {
+                            numObjetos++;
                             String value = keyValue[1];
                             keyValueDB.insert(key, value);
+                            // Usando os algortimos de paginação caso o tamnho de objetos inserido ultrapasse
+                            // o limite desejado
+                            paginas[numObjetos] = key;
+                            if(numObjetos>numObjetosMax){
+                                LRU lruAlgo = new LRU();
+                                lruAlgo.pageFaults(paginas, numObjetos, numObjetosMax);
+                            }
                             
                         } else if (command.equals("remover")) {
                             keyValueDB.remove(key);
