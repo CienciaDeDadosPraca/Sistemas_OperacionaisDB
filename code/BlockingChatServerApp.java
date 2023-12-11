@@ -9,6 +9,7 @@ import java.util.List;
 
 // Aplicação servidora de chat utilizando a classe {@link ServerSocket}, que permite apenas requisições bloqueantes (blocking).
 public class BlockingChatServerApp {
+    
     // Instância da base de dados chave-valor
     KeyValueDatabase keyValueDB = new KeyValueDatabase("Database.txt");
 
@@ -104,13 +105,14 @@ public class BlockingChatServerApp {
                 if ("sair".equalsIgnoreCase(msg)) {
                     return;
                 }
-
+                
                 if (clientSocket.getLogin() == null) {
                     clientSocket.setLogin(msg);
                     System.out.println("Cliente " + clientIP + " logado como " + clientSocket.getLogin() + ".");
                     msg= "Cliente " + clientSocket.getLogin() + " logado.";
-                } else {
-                    // Implementar leitura dos comandos inseridos pelo usuário da DB
+                }
+                else {
+                    // Implementa leitura dos comandos inseridos pelo usuário da DB
                     System.out.println("Mensagem recebida de " + clientSocket.getLogin() + ": " + msg);
                     String[] comandoKeyValue = msg.split(" ");
                     String command = comandoKeyValue[0];
@@ -132,24 +134,29 @@ public class BlockingChatServerApp {
                                 lruAlgo.pageFaults(paginas, numObjetos, numObjetosMax);
                             }
                             
-                        } else if (command.equals("remover")) {
+                        }
+                        else if (command.equals("remover")) {
                             keyValueDB.remove(key);
                         } 
                         else if (command.equals("loop")) {
                             do {
                                 System.out.println("a");
-                            } while (true);
+                            }
+                            while (true);
                         }
                         else if (command.equals("buscar")) {
                             String result = keyValueDB.search(key);
                             System.out.println("Valor encontrado: " + result);
-                        } else if (command.equals("atualizar")) {
+                        }
+                        else if (command.equals("atualizar")) {
                             String value = keyValue[1];
                             keyValueDB.update(key, value);
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         System.out.println("Erro ao acessar o arquivo: " + e.getMessage());
-                    } catch (NumberFormatException e) {
+                    }
+                    catch (NumberFormatException e) {
                         System.out.println("O valor de entrada para a chave deve ser um número inteiro.");
                     }
                     msg = clientSocket.getLogin() + " diz: " + msg;
@@ -157,7 +164,8 @@ public class BlockingChatServerApp {
 
                 sendMsgToAll(clientSocket, msg);
             }
-        } finally {
+        }
+        finally {
             clientSocket.close();
         }
     }
@@ -193,7 +201,8 @@ public class BlockingChatServerApp {
         try {
             System.out.println("Finalizando servidor");
             serverSocket.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.err.println("Erro ao fechar socket do servidor: " + e.getMessage());
         }
     }
